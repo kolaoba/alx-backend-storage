@@ -10,7 +10,7 @@ from uuid import uuid4
 from functools import wraps
 
 
-def count_calls(method: Callable = None) -> Callable:
+def count_calls(method: Callable) -> Callable:
 
     @wraps(method)
     def wrapper(*args, **kwargs):
