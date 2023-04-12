@@ -26,6 +26,23 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
+def call_history(method: Callable) -> Callable:
+    """
+    decorator to add input parametersand output parameters to
+    different lists in redis
+    """
+    @wraps(method)
+    def wrapper(*args, **kwargs):
+
+        key = method.__qualname__
+        args[0]._redis.rpush("{}:inputs".format(key), str(args[1:]))
+        result = method(*args, **kwargs)
+        args[0]._redis.rpush("{}:outputs".format(key), str(result))
+
+        return result
+    return wrapper
+
+
 class Cache:
     """
     defines Cache class
@@ -38,6 +55,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
@@ -78,7 +96,7 @@ class Cache:
         """
         method to retrieve stored value in str format
         """
-        return self.get(key, lambda d: d.decode("utf-8"))
+        return str(self.get(key, lambda d: d.decode("utf-8")))
 
     def get_int(self, key: str) -> int:
         """
