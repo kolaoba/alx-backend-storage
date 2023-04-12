@@ -17,13 +17,15 @@ if __name__ == "__main__":
     put = nginx.count_documents({"method": "PUT"})
     patch = nginx.count_documents({"method": "PATCH"})
     delete = nginx.count_documents({"method": "DELETE"})
-    status = nginx.count_documents({"method": "GET", "path": "/status"})
+    status = nginx.count_documents({"$and": [{"method": "GET"}, {"path": "/status"}]})
 
-    print('{} logs\nMethods:\n\
-    \tmethod GET: {}\n\
-    \tmethod POST: {}\n\
-    \tmethod PUT: {}\n\
-    \tmethod PATCH: {}\n\
-    \tmethod DELETE: {}\n{} status check'
+    print('''{} logs
+Methods:
+    method GET: {}
+    method POST: {}
+    method PUT: {}
+    method PATCH: {}
+    method DELETE: {}
+{} status check'''
           .format(log, get, post, put, patch, delete, status)
           )
