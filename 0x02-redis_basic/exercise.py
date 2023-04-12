@@ -11,6 +11,9 @@ from functools import wraps
 
 
 def count_calls(method: Callable) -> Callable:
+    """
+    decorator to count number of implementations of Cache methods
+    """
 
     @wraps(method)
     def wrapper(*args, **kwargs):
