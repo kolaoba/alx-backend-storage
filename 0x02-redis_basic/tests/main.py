@@ -34,3 +34,11 @@ for value, fn in TEST_CASES.items():
 # key = cache.store("waiufj")
 # print(cache.get(key))
 
+cache = Cache()
+
+cache.store(b"first")
+print(cache.get(cache.store.__qualname__))
+
+cache.store(b"second")
+cache.store(b"third")
+print(cache.get(cache.store.__qualname__))
